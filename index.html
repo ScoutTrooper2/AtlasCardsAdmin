@@ -1,16 +1,1233 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>replit</title>
-  <link href="style.css" rel="stylesheet" type="text/css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Генератор ключ-карт | Atlas HRP</title>
+  <style>
+    :root {
+      --primary: #6e00ff;
+      --secondary: #ff00a0;
+      --accent: #00f7ff;
+      --dark: #0a0a14;
+      --darker: #05050a;
+      --light: #f0f0ff;
+      --card-bg: linear-gradient(145deg, #131320, #0d0d15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+    }
+
+    @font-face {
+      font-family: 'Rajdhani';
+      src: url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;700&display=swap');
+    }
+
+    body {
+      background: var(--dark);
+      color: var(--light);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(110, 0, 255, 0.15) 0%, transparent 30%),
+        radial-gradient(circle at 80% 70%, rgba(255, 0, 160, 0.15) 0%, transparent 30%);
+      overflow-x: hidden;
+    }
+
+    .cyber-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .cyber-title {
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 15px rgba(110, 0, 255, 0.3);
+      animation: pulse 4s infinite alternate;
+    }
+
+    .cyber-subtitle {
+      color: rgba(240, 240, 255, 0.7);
+      font-size: 1.2rem;
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .control-panel {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow:
+        8px 8px 16px rgba(5, 5, 10, 0.5),
+        -8px -8px 16px rgba(30, 30, 50, 0.1);
+      border: 1px solid rgba(110, 0, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .control-panel:hover {
+      transform: translateY(-5px);
+      box-shadow:
+        12px 12px 24px rgba(5, 5, 10, 0.6),
+        -12px -12px 24px rgba(30, 30, 50, 0.2);
+    }
+
+    .control-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+
+    .panel-title {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+    }
+
+    .panel-title::before {
+      content: '';
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background: var(--accent);
+      margin-right: 10px;
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.8rem;
+      color: rgba(240, 240, 255, 0.8);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      font-size: 0.95rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 1rem;
+      background: rgba(10, 10, 20, 0.5);
+      border: 1px solid rgba(110, 0, 255, 0.3);
+      border-radius: 10px;
+      color: var(--light);
+      font-size: 1rem;
+      transition: all 0.3s;
+      box-shadow: inset 4px 4px 8px rgba(5, 5, 10, 0.5);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow:
+        inset 4px 4px 8px rgba(5, 5, 10, 0.5),
+        0 0 15px rgba(0, 247, 255, 0.3);
+    }
+
+    .access-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .access-item {
+      background: rgba(10, 10, 20, 0.5);
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+      border: 1px solid rgba(110, 0, 255, 0.1);
+      transition: all 0.3s;
+    }
+
+    .access-item:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    .access-label {
+      font-size: 0.8rem;
+      color: rgba(240, 240, 255, 0.6);
+      margin-bottom: 0.5rem;
+    }
+
+    .level-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .level-input {
+      width: 40px;
+      text-align: center;
+      background: transparent;
+      border: 1px solid rgba(110, 0, 255, 0.3);
+      color: var(--light);
+      padding: 0.5rem;
+      border-radius: 5px;
+      font-weight: 700;
+    }
+
+    .level-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .level-btn {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: rgba(110, 0, 255, 0.3);
+      color: var(--light);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .level-btn:hover {
+      background: var(--primary);
+      transform: scale(1.1);
+    }
+
+    .level-btn:active {
+      transform: scale(0.9);
+    }
+
+    .color-picker {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .color-input {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid var(--light);
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s;
+    }
+
+    .color-input:hover {
+      transform: scale(1.1);
+    }
+
+    .color-value {
+      flex: 1;
+      background: rgba(10, 10, 20, 0.5);
+      padding: 0.8rem;
+      border-radius: 10px;
+      font-family: monospace;
+      font-size: 0.9rem;
+    }
+
+    .keycard-preview {
+      position: relative;
+      perspective: 1000px;
+    }
+
+    .keycard {
+      width: 100%;
+      height: 280px;
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow:
+        12px 12px 24px rgba(5, 5, 10, 0.6),
+        -8px -8px 16px rgba(30, 30, 50, 0.1),
+        inset 0 0 30px rgba(110, 0, 255, 0.1);
+      border: 1px solid rgba(110, 0, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      transition: transform 0.5s;
+    }
+
+    .keycard:hover {
+      transform: rotateY(10deg) rotateX(5deg);
+    }
+
+    .keycard::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(to bottom right,
+          transparent 0%,
+          rgba(110, 0, 255, 0.05) 30%,
+          rgba(255, 0, 160, 0.05) 70%,
+          transparent 100%);
+      transform: rotate(30deg);
+      animation: shine 6s infinite;
+    }
+
+    .keycard-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .keycard-id {
+      background: rgba(0, 247, 255, 0.1);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      border: 1px solid rgba(0, 247, 255, 0.2);
+    }
+
+    .keycard-type {
+      color: rgba(240, 240, 255, 0.7);
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+    }
+
+    .keycard-title {
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: var(--light);
+      position: relative;
+      z-index: 2;
+    }
+
+    .keycard-department {
+      font-size: 0.9rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .keycard-position {
+      font-size: 0.9rem;
+      color: rgba(240, 240, 255, 0.8);
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .keycard-levels {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .level {
+      flex: 1;
+      background: rgba(10, 10, 20, 0.5);
+      border-radius: 10px;
+      padding: 0.8rem;
+      text-align: center;
+      border: 1px solid rgba(110, 0, 255, 0.2);
+      box-shadow: inset 3px 3px 6px rgba(5, 5, 10, 0.5);
+    }
+
+    .level-label {
+      font-size: 0.7rem;
+      color: rgba(240, 240, 255, 0.6);
+      margin-bottom: 0.3rem;
+    }
+
+    .level-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .keycard-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .keycard-colors {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .color-swatch {
+      width: 30px;
+      height: 15px;
+      border-radius: 3px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .keycard-chip {
+      width: 40px;
+      height: 30px;
+      background: linear-gradient(135deg, #d9d9d9, #a6a6a6);
+      border-radius: 5px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .keycard-chip::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg,
+          rgba(255, 255, 255, 0.3) 0%,
+          rgba(255, 255, 255, 0) 50%,
+          rgba(0, 0, 0, 0.1) 50%,
+          rgba(0, 0, 0, 0) 100%);
+    }
+
+    .result-panel {
+      margin-top: 2rem;
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow:
+        8px 8px 16px rgba(5, 5, 10, 0.5),
+        -8px -8px 16px rgba(30, 30, 50, 0.1);
+      border: 1px solid rgba(110, 0, 255, 0.1);
+      grid-column: 1 / -1;
+    }
+
+    #result {
+      width: 100%;
+      min-height: 150px;
+      background: rgba(10, 10, 20, 0.5);
+      border: 1px solid rgba(110, 0, 255, 0.3);
+      border-radius: 10px;
+      padding: 1rem;
+      color: var(--light);
+      font-family: monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+      resize: vertical;
+      box-shadow: inset 4px 4px 8px rgba(5, 5, 10, 0.5);
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 50px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      color: white;
+      box-shadow: 0 5px 15px rgba(110, 0, 255, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(110, 0, 255, 0.6);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: 0.5s;
+    }
+
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+
+    .btn-secondary {
+      background: rgba(10, 10, 20, 0.5);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      box-shadow: 0 0 10px rgba(0, 247, 255, 0.2);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(0, 247, 255, 0.1);
+      box-shadow: 0 0 20px rgba(0, 247, 255, 0.4);
+    }
+
+    .cyber-footer {
+      margin-top: 3rem;
+      text-align: center;
+      color: rgba(240, 240, 255, 0.5);
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+    }
+
+    @keyframes pulse {
+      0% {
+        text-shadow: 0 0 15px rgba(110, 0, 255, 0.3);
+      }
+
+      50% {
+        text-shadow: 0 0 25px rgba(255, 0, 160, 0.5);
+      }
+
+      100% {
+        text-shadow: 0 0 15px rgba(0, 247, 255, 0.3);
+      }
+    }
+
+    @keyframes shine {
+      0% {
+        opacity: 0;
+        transform: rotate(30deg) translate(-10%, -10%);
+      }
+
+      50% {
+        opacity: 0.5;
+      }
+
+      100% {
+        opacity: 0;
+        transform: rotate(30deg) translate(10%, 10%);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cyber-title {
+        font-size: 2rem;
+      }
+
+      .access-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 500px) {
+      .access-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    .presets-panel {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow:
+        8px 8px 16px rgba(5, 5, 10, 0.5),
+        -8px -8px 16px rgba(30, 30, 50, 0.1);
+      border: 1px solid rgba(110, 0, 255, 0.1);
+      grid-column: 1 / -1;
+      margin-top: 1rem;
+    }
+
+    .presets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .preset-item {
+      background: rgba(10, 10, 20, 0.5);
+      border-radius: 10px;
+      padding: 1rem;
+      border: 1px solid rgba(110, 0, 255, 0.2);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .preset-item:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 247, 255, 0.1);
+    }
+
+    .preset-name {
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
+
+    .preset-details {
+      font-size: 0.8rem;
+      color: rgba(240, 240, 255, 0.7);
+    }
+
+    .preset-author {
+      margin-top: 0.5rem;
+      font-style: italic;
+      color: rgba(240, 240, 255, 0.5);
+      font-size: 0.8rem;
+    }
+
+    .keycard-author {
+      position: absolute;
+      bottom: 1rem;
+      right: 1.5rem;
+      font-size: 0.7rem;
+      color: rgba(240, 240, 255, 0.5);
+      font-style: italic;
+    }
+
+    .presets-loading {
+      text-align: center;
+      padding: 1rem;
+      color: rgba(240, 240, 255, 0.7);
+    }
+
+    .presets-error {
+      text-align: center;
+      padding: 1rem;
+      color: #ff6b6b;
+    }
+  </style>
 </head>
 
 <body>
-  Hello world
-  <script src="script.js"></script>
+  <div class="cyber-header">
+    <h1 class="cyber-title">Генератор ключ-карт</h1>
+    <p class="cyber-subtitle">Atlas HRP • Система управления доступом</p>
+  </div>
+
+  <div class="main-grid">
+    <div class="control-panel">
+      <h2 class="panel-title">Параметры карты</h2>
+
+      <div class="form-group">
+        <label class="form-label">PlayerID</label>
+        <input type="text" class="form-input" id="cardId" placeholder="0" value="0">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Имя ключ-карты (в инвентаре)</label>
+        <input type="text" class="form-input" id="keycardName" placeholder="Ключ-карта Логиста"
+          value="Ключ-карта Логиста">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Департамент</label>
+        <input type="text" class="form-input" id="department" placeholder="Департамент" value="LOGISTIC DEPARTMENT"
+          oninput="this.value = this.value.toUpperCase()">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Должность</label>
+        <input type="text" class="form-input" id="position" placeholder="Логист" value="Логист">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Тип карты</label>
+        <select class="form-input" id="cardType">
+          <option value="KeycardCustomMetalCase">Карта в металлическом кейсе</option>
+          <option value="KeycardCustomTaskForce">Карта Оперативных Подразделений</option>
+          <option value="KeycardCustomSite02">Карта обычная</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Цвет карты</label>
+        <div class="color-picker">
+          <input type="color" class="color-input" id="cardColor" value="#528198">
+          <div class="color-value" id="colorHex">#528198</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="keycard-preview">
+      <div class="keycard" id="keycardPreview">
+        <div class="keycard-header">
+          <div class="keycard-id" id="previewCardId">0</div>
+          <div class="keycard-type" id="previewCardType">Карта в металлическом кейсе</div>
+        </div>
+
+        <div class="keycard-department" id="previewDepartment">LOGISTIC DEPARTMENT</div>
+        <div class="keycard-position" id="previewPosition">Логист</div>
+
+        <div class="keycard-levels">
+          <div class="level">
+            <div class="level-label">Содержательный</div>
+            <div class="level-value" id="previewContainmentLevel">0</div>
+          </div>
+          <div class="level">
+            <div class="level-label">Оружейный</div>
+            <div class="level-value" id="previewArmoryLevel">0</div>
+          </div>
+          <div class="level">
+            <div class="level-label">Административный</div>
+            <div class="level-value" id="previewAdminLevel">0</div>
+          </div>
+        </div>
+
+        <div class="keycard-footer">
+          <div class="keycard-colors">
+            <div class="color-swatch" id="previewColorSwatch" style="background: #528198;"></div>
+          </div>
+          <div class="keycard-chip"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="control-panel">
+      <h2 class="panel-title">Уровни доступа</h2>
+
+      <div class="access-grid">
+        <div class="access-item">
+          <div class="access-label">Содержательный уровень</div>
+          <div class="level-controls">
+            <button class="level-btn" id="minusContainment">-</button>
+            <input type="number" class="level-input" id="containmentLevel" min="0" max="3" value="0">
+            <button class="level-btn" id="plusContainment">+</button>
+          </div>
+        </div>
+
+        <div class="access-item">
+          <div class="access-label">Оружейный уровень</div>
+          <div class="level-controls">
+            <button class="level-btn" id="minusArmory">-</button>
+            <input type="number" class="level-input" id="armoryLevel" min="0" max="3" value="0">
+            <button class="level-btn" id="plusArmory">+</button>
+          </div>
+        </div>
+
+        <div class="access-item">
+          <div class="access-label">Административный уровень</div>
+          <div class="level-controls">
+            <button class="level-btn" id="minusAdmin">-</button>
+            <input type="number" class="level-input" id="adminLevel" min="0" max="3" value="0">
+            <button class="level-btn" id="plusAdmin">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="presets-panel">
+      <h2 class="panel-title">Шаблоны карт</h2>
+      <div class="presets-grid" id="presetsContainer">
+        <div class="presets-loading">Загрузка шаблонов...</div>
+      </div>
+    </div>
+
+    <div class="result-panel">
+      <h2 class="panel-title">Результат</h2>
+      <textarea id="result" readonly placeholder="Здесь появится сгенерированный код ключ-карты..."></textarea>
+
+      <div class="action-buttons">
+        <button class="btn btn-primary" id="generateBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path
+              d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
+          </svg>
+          Сгенерировать
+        </button>
+        <button class="btn btn-secondary" id="copyBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path
+              d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z" />
+            <path
+              d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z" />
+          </svg>
+          Копировать
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="cyber-footer">
+    <p>Atlas HRP • Создание персонализированных карт доступа • Оригинальная идея Rysik5318 • Изменил Scout Trooper</p>
+  </div>
+
+  <script>
+    // Получаем элементы DOM для формы
+    const cardId = document.getElementById('cardId');
+    const keycardName = document.getElementById('keycardName');
+    const department = document.getElementById('department');
+    const position = document.getElementById('position');
+    const cardType = document.getElementById('cardType');
+    const cardColor = document.getElementById('cardColor');
+    const colorHex = document.getElementById('colorHex');
+    const containmentLevel = document.getElementById('containmentLevel');
+    const armoryLevel = document.getElementById('armoryLevel');
+    const adminLevel = document.getElementById('adminLevel');
+    const resultTextarea = document.getElementById('result');
+    const generateBtn = document.getElementById('generateBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const keycardPreview = document.getElementById('keycardPreview');
+
+    // Получаем кнопки +/-
+    const minusContainment = document.getElementById('minusContainment');
+    const plusContainment = document.getElementById('plusContainment');
+    const minusArmory = document.getElementById('minusArmory');
+    const plusArmory = document.getElementById('plusArmory');
+    const minusAdmin = document.getElementById('minusAdmin');
+    const plusAdmin = document.getElementById('plusAdmin');
+
+    // Получаем элементы DOM для предпросмотра
+    const previewCardId = document.getElementById('previewCardId');
+    const previewDepartment = document.getElementById('previewDepartment');
+    const previewPosition = document.getElementById('previewPosition');
+    const previewCardType = document.getElementById('previewCardType');
+    const previewColorSwatch = document.getElementById('previewColorSwatch');
+    const previewContainmentLevel = document.getElementById('previewContainmentLevel');
+    const previewArmoryLevel = document.getElementById('previewArmoryLevel');
+    const previewAdminLevel = document.getElementById('previewAdminLevel');
+
+    // Обработчики кнопок +/-
+    plusContainment.addEventListener('click', function () {
+      let value = parseInt(containmentLevel.value);
+      if (value < 3) {
+        containmentLevel.value = value + 1;
+        updateKeycardPreview();
+      }
+    });
+
+    minusContainment.addEventListener('click', function () {
+      let value = parseInt(containmentLevel.value);
+      if (value > 0) {
+        containmentLevel.value = value - 1;
+        updateKeycardPreview();
+      }
+    });
+
+    plusArmory.addEventListener('click', function () {
+      let value = parseInt(armoryLevel.value);
+      if (value < 3) {
+        armoryLevel.value = value + 1;
+        updateKeycardPreview();
+      }
+    });
+
+    minusArmory.addEventListener('click', function () {
+      let value = parseInt(armoryLevel.value);
+      if (value > 0) {
+        armoryLevel.value = value - 1;
+        updateKeycardPreview();
+      }
+    });
+
+    plusAdmin.addEventListener('click', function () {
+      let value = parseInt(adminLevel.value);
+      if (value < 3) {
+        adminLevel.value = value + 1;
+        updateKeycardPreview();
+      }
+    });
+
+    minusAdmin.addEventListener('click', function () {
+      let value = parseInt(adminLevel.value);
+      if (value > 0) {
+        adminLevel.value = value - 1;
+        updateKeycardPreview();
+      }
+    });
+
+    // Валидация ввода уровней
+    function validateLevelInput(input) {
+      let value = parseInt(input.value);
+      if (isNaN(value)) value = 0;
+      if (value < 0) value = 0;
+      if (value > 3) value = 3;
+      input.value = value;
+    }
+
+    // Обновление предпросмотра карты
+    function updateKeycardPreview() {
+      // Обновляем основные данные
+      previewCardId.textContent = cardId.value || '0';
+      previewDepartment.textContent = department.value || 'LOGISTIC DEPARTMENT';
+      previewPosition.textContent = position.value || 'Должность';
+      previewCardType.textContent = cardType.options[cardType.selectedIndex].text;
+
+      // Обновляем уровни доступа
+      previewContainmentLevel.textContent = containmentLevel.value;
+      previewArmoryLevel.textContent = armoryLevel.value;
+      previewAdminLevel.textContent = adminLevel.value;
+
+      // Обновляем цвет карты
+      const color = cardColor.value;
+      previewColorSwatch.style.background = color;
+      colorHex.textContent = color;
+
+      // Обновляем команду
+      updateCommand();
+    }
+
+    // Функция для корректировки цвета
+    function adjustColor(hex, percent) {
+      // Удаляем символ # если есть
+      hex = hex.replace(/^#/, '');
+
+      // Преобразуем в RGB
+      let r = parseInt(hex.substring(0, 2), 16);
+      let g = parseInt(hex.substring(2, 4), 16);
+      let b = parseInt(hex.substring(4, 6), 16);
+
+      // Корректируем яркость
+      r = Math.min(255, Math.max(0, r + r * percent / 100));
+      g = Math.min(255, Math.max(0, g + g * percent / 100));
+      b = Math.min(255, Math.max(0, b + b * percent / 100));
+
+      // Преобразуем обратно в HEX
+      r = Math.round(r).toString(16).padStart(2, '0');
+      g = Math.round(g).toString(16).padStart(2, '0');
+      b = Math.round(b).toString(16).padStart(2, '0');
+
+      return `#${r}${g}${b}`;
+    }
+
+    // Генерация команды
+    function updateCommand() {
+      const formattedKeycardName = keycardName.value.replace(/ /g, '_');
+      const formattedDepartment = department.value.replace(/ /g, '_');
+      const formattedPosition = position.value.replace(/ /g, '_');
+      loadPresets();
+
+      const command = `ckrp add ${cardType.value} ${containmentLevel.value} ${armoryLevel.value} ${adminLevel.value} ${formattedDepartment} ${formattedPosition} ${cardColor.value} ${formattedKeycardName} ${cardId.value}`;
+      resultTextarea.value = command;
+    }
+
+    // Копирование в буфер обмена
+    function copyToClipboard() {
+      if (!resultTextarea.value) {
+        alert('Сначала заполните все обязательные поля!');
+        return;
+      }
+
+      resultTextarea.select();
+      document.execCommand('copy');
+
+      // Визуальная обратная связь
+      const originalText = copyBtn.innerHTML;
+      copyBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/></svg> Скопировано!';
+      copyBtn.style.background = 'linear-gradient(to right, #00cc66, #00ff88)';
+
+      setTimeout(() => {
+        copyBtn.innerHTML = originalText;
+        copyBtn.style.background = '';
+      }, 2000);
+    }
+
+    // Обработчики событий
+    cardColor.addEventListener('input', function () {
+      colorHex.textContent = this.value;
+      updateKeycardPreview();
+    });
+
+    generateBtn.addEventListener('click', updateKeycardPreview);
+    copyBtn.addEventListener('click', copyToClipboard);
+
+    // Валидация при изменении значений
+    containmentLevel.addEventListener('change', function () {
+      validateLevelInput(this);
+      updateKeycardPreview();
+    });
+
+    armoryLevel.addEventListener('change', function () {
+      validateLevelInput(this);
+      updateKeycardPreview();
+    });
+
+    adminLevel.addEventListener('change', function () {
+      validateLevelInput(this);
+      updateKeycardPreview();
+    });
+
+    // Обновление при изменении значений
+    const allInputs = document.querySelectorAll('input, select');
+    allInputs.forEach(input => {
+      input.addEventListener('input', updateKeycardPreview);
+    });
+
+    // Инициализация
+    updateKeycardPreview();
+    const presetsContainer = document.getElementById('presetsContainer');
+    let presetsData = [];
+
+    // Функция загрузки пресетов из файла
+    async function loadPresets() {
+      loadDefaultPresets();
+    }
+
+
+    // Загрузка стандартных пресетов
+    function loadDefaultPresets() {
+      presetsData = [
+        {
+          name: "Директор Участка-07",
+          author: "Hovers",
+          cardType: "KeycardCustomMetalCase",
+          keycardName: "Ключ-Карта_Директора",
+          department: "ADMINISTATIV_DEPARTAMENT",
+          position: "Директор «Участка-07»",
+          color: "#960030",
+          containment: 3,
+          armory: 3,
+          admin: 3
+        },
+        {
+          name: "Инженер",
+          author: "Hovers",
+          cardType: "KeycardCustomMetalCase",
+          keycardName: "Ключ-Карта_Инженера",
+          department: "ENGINERING_&_TECHICAL_DEPARTAMENT",
+          position: "Инженер",
+          color: "#00ad76",
+          containment: 3,
+          armory: 2,
+          admin: 0
+        },
+        {
+          name: "Инженер Камер Содержаний",
+          author: "Hovers",
+          cardType: "KeycardCustomMetalCase",
+          keycardName: "Ключ-Карта_Инженера_К.С",
+          department: "ENGINERING_&_TECHICAL_DEPARTAMENT",
+          position: "Инженер Камер Содержаний",
+          color: "#00ad76",
+          containment: 3,
+          armory: 2,
+          admin: 0
+        },
+        {
+          name: "Научный Сотрудник",
+          author: "Hovers",
+          cardType: "KeycardCustomMetalCase",
+          keycardName: "Ключ-Карта_Научного-Сотрудника",
+          department: "SCIENTIFIC_DEPARTAMENT",
+          position: "Научный-Сотрудник",
+          color: "#ffcd42",
+          containment: 2,
+          armory: 1,
+          admin: 0
+        },
+        {
+          name: "Старший Научный Сотрудник",
+          author: "Hovers",
+          cardType: "KeycardCustomMetalCase",
+          keycardName: "Ключ-Карта_Ст._Научного-Сотрудника",
+          department: "SCIENTIFIC_DEPARTAMENT",
+          position: "Старший_Научный-Сотрудник",
+          color: "#ffcd42",
+          containment: 3,
+          armory: 1,
+          admin: 0
+        },
+        {
+          name: "Куратор SCP-000",
+          author: "Hovers",
+          cardType: "KeycardCustomMetalCase",
+          keycardName: "Ключ-Карта_Куратора",
+          department: "SCIENTIFIC_DEPARTAMENT",
+          position: "Куратор_SCP-000",
+          color: "#ffcd42",
+          containment: 3,
+          armory: 2,
+          admin: 0
+        },
+        {
+          name: "Руководитель",
+          author: "Hovers",
+          cardType: "KeycardCustomMetalCase",
+          keycardName: "Ключ-Карта_Руководителя",
+          department: "SCIENTIFIC_DEPARTAMENT",
+          position: "Руководитель",
+          color: "#960030",
+          containment: 3,
+          armory: 3,
+          admin: 1
+        },
+        {
+          name: "Штатный Логист",
+          author: "Hovers",
+          cardType: "KeycardCustomMetalCase",
+          keycardName: "Ключ-Карта_Штатного-Логиста",
+          department: "LOGISTICS_DEPARTAMENT",
+          position: "Штатный_Логист",
+          color: "#0048ad",
+          containment: 0,
+          armory: 1,
+          admin: 0
+        },
+        {
+          name: "Логист",
+          author: "Hovers",
+          cardType: "KeycardCustomMetalCase",
+          keycardName: "Ключ-Карта_Логиста",
+          department: "LOGISTICS_DEPARTAMENT",
+          position: "Логист",
+          color: "#0048ad",
+          containment: 0,
+          armory: 1,
+          admin: 0
+        },
+        {
+          name: "Грузчик",
+          author: "Hovers",
+          cardType: "KeycardCustomMetalCase",
+          keycardName: "Ключ-Карта_Грузчик",
+          department: "LOGISTICS_DEPARTAMENT",
+          position: "Грузчик",
+          color: "#0048ad",
+          containment: 0,
+          armory: 1,
+          admin: 0
+        },
+        {
+          name: "IT-Специалист",
+          author: "Hovers",
+          cardType: "KeycardCustomMetalCase",
+          keycardName: "Ключ-Карта_IT-Специалист",
+          department: "ENGINERING_&_TECHICAL_DEPARTAMENT",
+          position: "IT-Специалист",
+          color: "#00ad76",
+          containment: 2,
+          armory: 1,
+          admin: 0
+        }
+      ];
+      renderPresets();
+    }
+
+    // Функция отображения ошибки
+    function showPresetsError(message) {
+      presetsContainer.innerHTML = `<div class="presets-error">${message}</div>`;
+    }
+
+    // Функция отрисовки пресетов
+    function renderPresets() {
+      presetsContainer.innerHTML = '';
+
+      if (presetsData.length === 0) {
+        presetsContainer.innerHTML = '<div class="presets-loading">Нет доступных шаблонов</div>';
+        return;
+      }
+
+      presetsData.forEach(preset => {
+        const presetElement = document.createElement('div');
+        presetElement.className = 'preset-item';
+        presetElement.innerHTML = `
+                    <div class="preset-name">${preset.name}</div>
+                    <div class="preset-details">
+                        Уровни: Содержание ${preset.containment} | Оружейная ${preset.armory} | Админ ${preset.admin}
+                    </div>
+                    <div class="preset-author">Автор: ${preset.author}</div>
+                `;
+
+        presetElement.addEventListener('click', () => {
+          applyPreset(preset);
+        });
+
+        presetsContainer.appendChild(presetElement);
+      });
+    }
+
+    // Функция применения пресета
+    function applyPreset(preset) {
+      cardType.value = preset.cardType;
+      keycardName.value = preset.keycardName;
+      department.value = preset.department;
+      position.value = preset.position;
+      cardColor.value = preset.color;
+      colorHex.textContent = preset.color;
+      containmentLevel.value = preset.containment;
+      armoryLevel.value = preset.armory;
+      adminLevel.value = preset.admin;
+
+      // Добавляем информацию об авторе в предпросмотр
+      const existingAuthor = document.querySelector('.keycard-author');
+      if (existingAuthor) {
+        existingAuthor.remove();;
+      }
+
+      const authorElement = document.createElement('div');
+      authorElement.className = 'keycard-author';
+      authorElement.textContent = `Шаблон: ${preset.author}`;
+      keycardPreview.appendChild(authorElement);
+
+      updateKeycardPreview();
+    }
+
+    // Инициализация (добавляем загрузку пресетов)
+    document.addEventListener('DOMContentLoaded', () => {
+      updateKeycardPreview();
+      loadPresets();
+    });
+
+        // Все остальные функции и обработчики событий остаются без изменений
+  </script>
 </body>
 
 </html>
