@@ -38,7 +38,7 @@
       flex-direction: column;
       align-items: center;
       padding: 2rem;
-      background-image: url('https://i.yapx.ru/Z874d.png');
+      background-image: url('https://cdn.discordapp.com/attachments/1274745026152235109/1395505189108318218/image.png?ex=687d53fc&is=687c027c&hm=0b813775f1d1a7ce86a7a363188dbd2a4c20985977c218cbfdf4f2402393d161&');
       background-size: cover;
       background-attachment: fixed;
       overflow-x: hidden;
@@ -589,7 +589,6 @@
         8px 8px 16px rgba(5, 5, 10, 0.5),
         -8px -8px 16px rgba(30, 30, 50, 0.1);
       border: 1px solid var(--main-color-transparent);
-      grid-column: 1 / -1;
       margin-top: 1rem;
     }
 
@@ -653,6 +652,13 @@
       padding: 1rem;
       color: #ff6b6b;
     }
+
+    /* Новые стили для правой колонки */
+    .right-column {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
   </style>
 </head>
 
@@ -706,36 +712,45 @@
       </div>
     </div>
 
-    <div class="keycard-preview">
-      <div class="keycard" id="keycardPreview">
-        <div class="keycard-header">
-          <div class="keycard-id" id="previewCardId">0</div>
-          <div class="keycard-type" id="previewCardType">Карта в металлическом кейсе</div>
+    <div class="right-column">
+      <div class="keycard-preview">
+        <div class="keycard" id="keycardPreview">
+          <div class="keycard-header">
+            <div class="keycard-id" id="previewCardId">0</div>
+            <div class="keycard-type" id="previewCardType">Карта в металлическом кейсе</div>
+          </div>
+
+          <div class="keycard-department" id="previewDepartment">LOGISTIC DEPARTMENT</div>
+          <div class="keycard-position" id="previewPosition">Логист</div>
+
+          <div class="keycard-levels">
+            <div class="level">
+              <div class="level-label">Содержательный</div>
+              <div class="level-value" id="previewContainmentLevel">0</div>
+            </div>
+            <div class="level">
+              <div class="level-label">Оружейный</div>
+              <div class="level-value" id="previewArmoryLevel">0</div>
+            </div>
+            <div class="level">
+              <div class="level-label">Административный</div>
+              <div class="level-value" id="previewAdminLevel">0</div>
+            </div>
+          </div>
+
+          <div class="keycard-footer">
+            <div class="keycard-colors">
+              <div class="color-swatch" id="previewColorSwatch" style="background: #528198;"></div>
+            </div>
+            <div class="keycard-chip"></div>
+          </div>
         </div>
+      </div>
 
-        <div class="keycard-department" id="previewDepartment">LOGISTIC DEPARTMENT</div>
-        <div class="keycard-position" id="previewPosition">Логист</div>
-
-        <div class="keycard-levels">
-          <div class="level">
-            <div class="level-label">Содержательный</div>
-            <div class="level-value" id="previewContainmentLevel">0</div>
-          </div>
-          <div class="level">
-            <div class="level-label">Оружейный</div>
-            <div class="level-value" id="previewArmoryLevel">0</div>
-          </div>
-          <div class="level">
-            <div class="level-label">Административный</div>
-            <div class="level-value" id="previewAdminLevel">0</div>
-          </div>
-        </div>
-
-        <div class="keycard-footer">
-          <div class="keycard-colors">
-            <div class="color-swatch" id="previewColorSwatch" style="background: #528198;"></div>
-          </div>
-          <div class="keycard-chip"></div>
+      <div class="presets-panel">
+        <h2 class="panel-title">Шаблоны карт</h2>
+        <div class="presets-grid" id="presetsContainer">
+          <div class="presets-loading">Загрузка шаблонов...</div>
         </div>
       </div>
     </div>
@@ -770,13 +785,6 @@
             <button class="level-btn" id="plusAdmin">+</button>
           </div>
         </div>
-      </div>
-    </div>
-
-    <div class="presets-panel">
-      <h2 class="panel-title">Шаблоны карт</h2>
-      <div class="presets-grid" id="presetsContainer">
-        <div class="presets-loading">Загрузка шаблонов...</div>
       </div>
     </div>
 
@@ -952,7 +960,6 @@
       const formattedKeycardName = keycardName.value.replace(/ /g, '_');
       const formattedDepartment = department.value.replace(/ /g, '_');
       const formattedPosition = position.value.replace(/ /g, '_');
-      loadPresets();
 
       const command = `ckrp add ${cardType.value} ${containmentLevel.value} ${adminLevel.value} ${armoryLevel.value} ${formattedDepartment} ${formattedPosition} ${cardColor.value} ${formattedKeycardName} ${cardId.value}`;
       resultTextarea.value = command;
@@ -1015,14 +1022,8 @@
     const presetsContainer = document.getElementById('presetsContainer');
     let presetsData = [];
 
-    // Функция загрузки пресетов из файла
-    async function loadPresets() {
-      loadDefaultPresets();
-    }
-
-
-    // Загрузка стандартных пресетов
-    function loadDefaultPresets() {
+    // Функция загрузки пресетов
+    function loadPresets() {
       presetsData = [
         {
           name: "Директор Участка-07",
@@ -1178,12 +1179,12 @@
         const presetElement = document.createElement('div');
         presetElement.className = 'preset-item';
         presetElement.innerHTML = `
-                    <div class="preset-name">${preset.name}</div>
-                    <div class="preset-details">
-                        Уровни: Содержание ${preset.containment} | Оружейная ${preset.armory} | Админ ${preset.admin}
-                    </div>
-                    <div class="preset-author">Автор: ${preset.author}</div>
-                `;
+          <div class="preset-name">${preset.name}</div>
+          <div class="preset-details">
+            Уровни: Содержание ${preset.containment} | Оружейная ${preset.armory} | Админ ${preset.admin}
+          </div>
+          <div class="preset-author">Автор: ${preset.author}</div>
+        `;
 
         presetElement.addEventListener('click', () => {
           applyPreset(preset);
@@ -1195,38 +1196,38 @@
 
     // Функция применения пресета
     function applyPreset(preset) {
+      // Удаляем старую информацию об авторе
+      const existingAuthor = document.querySelector('.keycard-author');
+      if (existingAuthor) {
+        existingAuthor.remove();
+      }
+
+      // Устанавливаем значения из пресета
       cardType.value = preset.cardType;
-      keycardName.value = preset.keycardName;
+      keycardName.value = preset.keycardName.replace(/_/g, ' ');
       department.value = preset.department;
-      position.value = preset.position;
+      position.value = preset.position.replace(/_/g, ' ');
       cardColor.value = preset.color;
-      colorHex.textContent = preset.color;
       containmentLevel.value = preset.containment;
       armoryLevel.value = preset.armory;
       adminLevel.value = preset.admin;
 
       // Добавляем информацию об авторе в предпросмотр
-      const existingAuthor = document.querySelector('.keycard-author');
-      if (existingAuthor) {
-        existingAuthor.remove();;
-      }
-
       const authorElement = document.createElement('div');
       authorElement.className = 'keycard-author';
       authorElement.textContent = `Шаблон: ${preset.author}`;
       keycardPreview.appendChild(authorElement);
 
+      // Обновляем предпросмотр
       updateKeycardPreview();
     }
 
-    // Инициализация (добавляем загрузку пресетов)
+    // Инициализация при загрузке страницы
     document.addEventListener('DOMContentLoaded', () => {
       updateKeycardPreview();
       loadPresets();
     });
-
-        // Все остальные функции и обработчики событий остаются без изменений
   </script>
 </body>
 
-</html>s
+</html>
