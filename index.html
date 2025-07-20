@@ -955,7 +955,7 @@
       const formattedPosition = position.value.replace(/ /g, '_');
       loadPresets();
 
-      const command = `ckrp add ${cardType.value} ${containmentLevel.value} ${armoryLevel.value} ${adminLevel.value} ${formattedDepartment} ${formattedPosition} ${cardColor.value} ${formattedKeycardName} ${cardId.value}`;
+      const command = `ckrp add ${cardType.value} ${containmentLevel.value} ${adminLevel.value} ${armoryLevel.value} ${formattedDepartment} ${formattedPosition} ${cardColor.value} ${formattedKeycardName} ${cardId.value}`;
       resultTextarea.value = command;
     }
 
@@ -1046,8 +1046,8 @@
           position: "Инженер",
           color: "#00ad76",
           containment: 3,
-          armory: 2,
-          admin: 0
+          armory: 0,
+          admin: 1
         },
         {
           name: "Инженер Камер Содержаний",
@@ -1058,8 +1058,8 @@
           position: "Инженер Камер Содержаний",
           color: "#00ad76",
           containment: 3,
-          armory: 2,
-          admin: 0
+          armory: 0,
+          admin: 1
         },
         {
           name: "Научный Сотрудник",
@@ -1070,7 +1070,7 @@
           position: "Научный-Сотрудник",
           color: "#ffcd42",
           containment: 2,
-          armory: 1,
+          armory: 0,
           admin: 0
         },
         {
@@ -1106,8 +1106,8 @@
           position: "Руководитель",
           color: "#960030",
           containment: 3,
-          armory: 3,
-          admin: 1
+          armory: 1,
+          admin: 3
         },
         {
           name: "Штатный Логист",
@@ -1117,8 +1117,8 @@
           department: "LOGISTICS_DEPARTAMENT",
           position: "Штатный_Логист",
           color: "#0048ad",
-          containment: 0,
-          armory: 1,
+          containment: 1,
+          armory: 0,
           admin: 0
         },
         {
@@ -1129,8 +1129,8 @@
           department: "LOGISTICS_DEPARTAMENT",
           position: "Логист",
           color: "#0048ad",
-          containment: 0,
-          armory: 1,
+          containment: 1,
+          armory: 0,
           admin: 0
         },
         {
@@ -1141,8 +1141,8 @@
           department: "LOGISTICS_DEPARTAMENT",
           position: "Грузчик",
           color: "#0048ad",
-          containment: 0,
-          armory: 1,
+          containment: 1,
+          armory: 0,
           admin: 0
         },
         {
@@ -1154,8 +1154,8 @@
           position: "IT-Специалист",
           color: "#00ad76",
           containment: 2,
-          armory: 1,
-          admin: 0
+          armory: 0,
+          admin: 1
         }
       ];
       renderPresets();
