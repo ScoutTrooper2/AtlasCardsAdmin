@@ -7,9 +7,11 @@
   <title>Генератор ключ-карт | Atlas HRP</title>
   <style>
     :root {
-      --primary: #6e00ff;
-      --secondary: #ff00a0;
-      --accent: #00f7ff;
+      --main-color: #AB2728; /* Основной цвет (можно легко изменить здесь) */
+      --main-color-dark: #8a1f20; /* Темный вариант */
+      --main-color-light: #c52f30; /* Светлый вариант */
+      --main-color-transparent: rgba(171, 39, 40, 0.1); /* Прозрачный вариант */
+      
       --dark: #0a0a14;
       --darker: #05050a;
       --light: #f0f0ff;
@@ -36,9 +38,9 @@
       flex-direction: column;
       align-items: center;
       padding: 2rem;
-      background-image:
-        radial-gradient(circle at 20% 30%, rgba(110, 0, 255, 0.15) 0%, transparent 30%),
-        radial-gradient(circle at 80% 70%, rgba(255, 0, 160, 0.15) 0%, transparent 30%);
+      background-image: url('https://i.yapx.ru/Z874d.png');
+      background-size: cover;
+      background-attachment: fixed;
       overflow-x: hidden;
     }
 
@@ -51,15 +53,11 @@
     .cyber-title {
       font-size: 3rem;
       font-weight: 700;
-      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+      color: var(--main-color);
       text-transform: uppercase;
       letter-spacing: 2px;
       margin-bottom: 0.5rem;
-      text-shadow: 0 0 15px rgba(110, 0, 255, 0.3);
-      animation: pulse 4s infinite alternate;
+      text-shadow: 0 0 15px var(--main-color-transparent);
     }
 
     .cyber-subtitle {
@@ -84,7 +82,7 @@
       box-shadow:
         8px 8px 16px rgba(5, 5, 10, 0.5),
         -8px -8px 16px rgba(30, 30, 50, 0.1);
-      border: 1px solid rgba(110, 0, 255, 0.1);
+      border: 1px solid var(--main-color-transparent);
       position: relative;
       overflow: hidden;
       transition: transform 0.3s, box-shadow 0.3s;
@@ -104,13 +102,13 @@
       left: 0;
       width: 100%;
       height: 4px;
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      background: var(--main-color);
     }
 
     .panel-title {
       font-size: 1.5rem;
       margin-bottom: 1.5rem;
-      color: var(--accent);
+      color: var(--main-color);
       display: flex;
       align-items: center;
     }
@@ -120,9 +118,9 @@
       display: inline-block;
       width: 10px;
       height: 10px;
-      background: var(--accent);
+      background: var(--main-color);
       margin-right: 10px;
-      box-shadow: 0 0 10px var(--accent);
+      box-shadow: 0 0 10px var(--main-color);
     }
 
     .form-group {
@@ -142,7 +140,7 @@
       width: 100%;
       padding: 1rem;
       background: rgba(10, 10, 20, 0.5);
-      border: 1px solid rgba(110, 0, 255, 0.3);
+      border: 1px solid var(--main-color-transparent);
       border-radius: 10px;
       color: var(--light);
       font-size: 1rem;
@@ -152,10 +150,10 @@
 
     .form-input:focus {
       outline: none;
-      border-color: var(--accent);
+      border-color: var(--main-color);
       box-shadow:
         inset 4px 4px 8px rgba(5, 5, 10, 0.5),
-        0 0 15px rgba(0, 247, 255, 0.3);
+        0 0 15px var(--main-color-transparent);
     }
 
     .access-grid {
@@ -169,12 +167,12 @@
       border-radius: 10px;
       padding: 1rem;
       text-align: center;
-      border: 1px solid rgba(110, 0, 255, 0.1);
+      border: 1px solid var(--main-color-transparent);
       transition: all 0.3s;
     }
 
     .access-item:hover {
-      border-color: var(--accent);
+      border-color: var(--main-color);
       transform: translateY(-3px);
     }
 
@@ -195,7 +193,7 @@
       width: 40px;
       text-align: center;
       background: transparent;
-      border: 1px solid rgba(110, 0, 255, 0.3);
+      border: 1px solid var(--main-color-transparent);
       color: var(--light);
       padding: 0.5rem;
       border-radius: 5px;
@@ -204,14 +202,14 @@
 
     .level-input:focus {
       outline: none;
-      border-color: var(--accent);
+      border-color: var(--main-color);
     }
 
     .level-btn {
       width: 25px;
       height: 25px;
       border-radius: 50%;
-      background: rgba(110, 0, 255, 0.3);
+      background: var(--main-color-transparent);
       color: var(--light);
       border: none;
       display: flex;
@@ -222,7 +220,7 @@
     }
 
     .level-btn:hover {
-      background: var(--primary);
+      background: var(--main-color);
       transform: scale(1.1);
     }
 
@@ -273,8 +271,8 @@
       box-shadow:
         12px 12px 24px rgba(5, 5, 10, 0.6),
         -8px -8px 16px rgba(30, 30, 50, 0.1),
-        inset 0 0 30px rgba(110, 0, 255, 0.1);
-      border: 1px solid rgba(110, 0, 255, 0.2);
+        inset 0 0 30px var(--main-color-transparent);
+      border: 1px solid var(--main-color-transparent);
       position: relative;
       overflow: hidden;
       transform-style: preserve-3d;
@@ -294,8 +292,8 @@
       height: 200%;
       background: linear-gradient(to bottom right,
           transparent 0%,
-          rgba(110, 0, 255, 0.05) 30%,
-          rgba(255, 0, 160, 0.05) 70%,
+          var(--main-color-transparent) 30%,
+          var(--main-color-transparent) 70%,
           transparent 100%);
       transform: rotate(30deg);
       animation: shine 6s infinite;
@@ -310,14 +308,14 @@
     }
 
     .keycard-id {
-      background: rgba(0, 247, 255, 0.1);
+      background: var(--main-color-transparent);
       padding: 0.5rem 1rem;
       border-radius: 20px;
       font-weight: 700;
-      color: var(--accent);
+      color: var(--main-color);
       font-size: 0.9rem;
       letter-spacing: 1px;
-      border: 1px solid rgba(0, 247, 255, 0.2);
+      border: 1px solid var(--main-color-transparent);
     }
 
     .keycard-type {
@@ -337,7 +335,7 @@
 
     .keycard-department {
       font-size: 0.9rem;
-      color: var(--accent);
+      color: var(--main-color);
       margin-bottom: 1rem;
       font-weight: 700;
       text-transform: uppercase;
@@ -364,7 +362,7 @@
       border-radius: 10px;
       padding: 0.8rem;
       text-align: center;
-      border: 1px solid rgba(110, 0, 255, 0.2);
+      border: 1px solid var(--main-color-transparent);
       box-shadow: inset 3px 3px 6px rgba(5, 5, 10, 0.5);
     }
 
@@ -377,7 +375,7 @@
     .level-value {
       font-size: 1.2rem;
       font-weight: 700;
-      color: var(--accent);
+      color: var(--main-color);
     }
 
     .keycard-footer {
@@ -431,7 +429,7 @@
       box-shadow:
         8px 8px 16px rgba(5, 5, 10, 0.5),
         -8px -8px 16px rgba(30, 30, 50, 0.1);
-      border: 1px solid rgba(110, 0, 255, 0.1);
+      border: 1px solid var(--main-color-transparent);
       grid-column: 1 / -1;
     }
 
@@ -439,7 +437,7 @@
       width: 100%;
       min-height: 150px;
       background: rgba(10, 10, 20, 0.5);
-      border: 1px solid rgba(110, 0, 255, 0.3);
+      border: 1px solid var(--main-color-transparent);
       border-radius: 10px;
       padding: 1rem;
       color: var(--light);
@@ -474,14 +472,15 @@
     }
 
     .btn-primary {
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      background: var(--main-color);
       color: white;
-      box-shadow: 0 5px 15px rgba(110, 0, 255, 0.4);
+      box-shadow: 0 5px 15px var(--main-color-transparent);
     }
 
     .btn-primary:hover {
+      background: var(--main-color-light);
       transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(110, 0, 255, 0.6);
+      box-shadow: 0 8px 20px var(--main-color-transparent);
     }
 
     .btn-primary:active {
@@ -505,14 +504,14 @@
 
     .btn-secondary {
       background: rgba(10, 10, 20, 0.5);
-      color: var(--accent);
-      border: 1px solid var(--accent);
-      box-shadow: 0 0 10px rgba(0, 247, 255, 0.2);
+      color: var(--main-color);
+      border: 1px solid var(--main-color);
+      box-shadow: 0 0 10px var(--main-color-transparent);
     }
 
     .btn-secondary:hover {
-      background: rgba(0, 247, 255, 0.1);
-      box-shadow: 0 0 20px rgba(0, 247, 255, 0.4);
+      background: var(--main-color-transparent);
+      box-shadow: 0 0 20px var(--main-color-transparent);
     }
 
     .cyber-footer {
@@ -525,15 +524,15 @@
 
     @keyframes pulse {
       0% {
-        text-shadow: 0 0 15px rgba(110, 0, 255, 0.3);
+        text-shadow: 0 0 15px var(--main-color-transparent);
       }
 
       50% {
-        text-shadow: 0 0 25px rgba(255, 0, 160, 0.5);
+        text-shadow: 0 0 25px var(--main-color-transparent);
       }
 
       100% {
-        text-shadow: 0 0 15px rgba(0, 247, 255, 0.3);
+        text-shadow: 0 0 15px var(--main-color-transparent);
       }
     }
 
@@ -589,7 +588,7 @@
       box-shadow:
         8px 8px 16px rgba(5, 5, 10, 0.5),
         -8px -8px 16px rgba(30, 30, 50, 0.1);
-      border: 1px solid rgba(110, 0, 255, 0.1);
+      border: 1px solid var(--main-color-transparent);
       grid-column: 1 / -1;
       margin-top: 1rem;
     }
@@ -605,21 +604,21 @@
       background: rgba(10, 10, 20, 0.5);
       border-radius: 10px;
       padding: 1rem;
-      border: 1px solid rgba(110, 0, 255, 0.2);
+      border: 1px solid var(--main-color-transparent);
       transition: all 0.3s;
       cursor: pointer;
     }
 
     .preset-item:hover {
-      border-color: var(--accent);
+      border-color: var(--main-color);
       transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(0, 247, 255, 0.1);
+      box-shadow: 0 5px 15px var(--main-color-transparent);
     }
 
     .preset-name {
       font-weight: 700;
       margin-bottom: 0.5rem;
-      color: var(--accent);
+      color: var(--main-color);
     }
 
     .preset-details {
@@ -1230,4 +1229,4 @@
   </script>
 </body>
 
-</html>
+</html>s
